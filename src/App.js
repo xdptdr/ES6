@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
 
+var monProto = Object.create(HTMLElement.prototype, {
+  createdCallback: { 
+    value: function() {
+      var monTexte = document.createTextNode("Hello world!"); 
+      this.appendChild(monTexte);
+    }
+  }
+});
+document.registerElement('hello-world', {
+  prototype: monProto
+});
+
 const possibilities = ['blip','blop'];
 
 function* genFunc() {
@@ -28,16 +40,25 @@ class Blip extends Component {
 	}
 }
 
+class Blop extends Component {
+	render() {
+		return (<div>
+			<div>Blop</div>
+			<hello-world/>
+		</div>);
+	}
+}
+
 class App extends Component {
 	state = {
-		what:possibilities[0]
+		what:possibilities[1]
 	}
 	page = {
 		blip:() => {
 			return <Blip />;
 		},
 		blop:() => {
-			return "Nothing there";
+			return <Blop />;
 		}
 	}
 	render() {
